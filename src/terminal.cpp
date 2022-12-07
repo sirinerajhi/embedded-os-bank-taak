@@ -1,4 +1,5 @@
 #include "terminal.h"
+#include <iostream>
 
 Terminal::Terminal() : Terminal("No ID", nullptr, nullptr){}
 
@@ -13,12 +14,18 @@ Terminal::Terminal(std::string terminalID, User * seller, Bancontact * bancontac
     }
 }
 
-std::string Terminal::sendTransaction(User * buyer, int amount, Bank * bank){
-   if(this->_bancontact->checkUserBalance(buyer, amount, bank)){
-        return "Transaction accepted";
-   } else {
-        return "Transaction refused";
-   }
+bool Terminal::sendTransaction(User * buyer, int amount){
+    std::cout << "Terminal processing transaction..." << std::endl;
+    
+    Bank * bank = (_bancontact->getUserBank(buyer));
+    if(this->_bancontact->checkUserBalance(buyer, amount, bank)){
+        std::cout << "Transaction accepted" << std::endl;
+        return true;
+    } else {
+        std::cout << "Transaction refused" << std::endl;
+        return false;
+    }
+    
 }
 
 std::string Terminal::getTerminalID(){

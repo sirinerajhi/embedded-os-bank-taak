@@ -317,5 +317,4 @@ BUILD\NUCLEO_L476RG\GCC_ARM\src\bank.o: src\bank.cpp \
  mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
  mbed-os/platform/include/platform/mbed_stats.h \
  mbed-os/platform/include/platform/Stream.h \
- mbed-os/platform/include/platform/FileLike.h src\user.h \
- src\transaction.h
+ mbed-os/platform/include/platform/FileLike.h src\user.h src\payment.h

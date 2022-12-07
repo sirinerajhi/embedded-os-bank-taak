@@ -317,5 +317,5 @@ BUILD\NUCLEO_L476RG\GCC_ARM\src\bancontact.o: src\bancontact.cpp \
  mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
  mbed-os/platform/include/platform/mbed_stats.h \
  mbed-os/platform/include/platform/Stream.h \
- mbed-os/platform/include/platform/FileLike.h src\user.h src\terminal.h \
- src\bank.h src\transaction.h
+ mbed-os/platform/include/platform/FileLike.h src\user.h src\bank.h \
+ src\payment.h

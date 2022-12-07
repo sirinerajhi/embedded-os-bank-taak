@@ -318,4 +318,4 @@ BUILD\NUCLEO_L476RG\GCC_ARM\src\terminal.o: src\terminal.cpp \
  mbed-os/platform/include/platform/mbed_stats.h \
  mbed-os/platform/include/platform/Stream.h \
  mbed-os/platform/include/platform/FileLike.h src\user.h src\bancontact.h \
- src\bank.h src\transaction.h
+ src\bank.h src\payment.h

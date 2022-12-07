@@ -10,8 +10,9 @@ class Terminal {
       
     public:
         Terminal();
+        // Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
         Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
-        std::string sendTransaction(User * buyer, int amount, Bank * bank);
+        bool sendTransaction(User * buyer, int amount);
         User getSeller();
         std::string getTerminalID();
         void setSeller(User * seller);
@@ -22,5 +23,4 @@ class Terminal {
         User * _seller = nullptr;
         Bancontact * _bancontact = nullptr;
         bool _connection = false;
-
 };
