@@ -13,10 +13,12 @@ class Terminal {
         // Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
         Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
         bool sendTransaction(User * buyer, int amount);
-        User getSeller();
+        User * getSeller(void);
         std::string getTerminalID();
         void setSeller(User * seller);
         void setTerminalID(std::string id);
+        Bancontact * getBancontact(void);
+        
 
     private:
         std::string _terminalID = "";

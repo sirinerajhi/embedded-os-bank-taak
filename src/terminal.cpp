@@ -36,6 +36,14 @@ void Terminal::setSeller(User * seller){
     this->_seller = seller;
 }
 
+User * Terminal::getSeller(void){
+    return this->_seller;
+}
+
 void Terminal::setTerminalID(std::string id){
     this->_terminalID = id;
+}
+
+Bancontact * Terminal::getBancontact(void){
+    return this->_bancontact;
 }

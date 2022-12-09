@@ -27,17 +27,13 @@ bool Bank::checkBalance(User * user, int amount){
     } 
 }
 
-void Bank::checkPaymentTime(Payment transaction) {
-    int counter = 0;
-    for(auto x : _userList){
-        if (x == transaction.getBuyer()){
-            pay(transaction);
-            counter++;
-        }
-    }
-    if (counter == 0){
-        dueTransactions.push_back(transaction);
-    }
+bool Bank::checkPaymentTime(Payment payment) {
+    User * buyer = payment.getBuyer();
+    User * seller = payment.getSeller();
+    std::string buyerBankID = buyer->getUserID().substr(0,buyer->getUserID().size()-1);
+    std::string sellerBankID = seller->getUserID().substr(0,seller->getUserID().size()-1);
+    
+    if(buyerBankID == sellerBankID) return true;
 }
 
 void Bank::pay(Payment transaction){

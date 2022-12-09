@@ -1,6 +1,4 @@
-//#include "src/bancontact.h"
 #include "bank.h"
-// #include "src/terminal.h"
 #include "src/bancontact.h"
 #include "src/bank.h"
 #include "src/terminal.h"
@@ -40,6 +38,67 @@ Terminal t7("t007", &restaurant, &b3);
 Terminal t8("t008", &restaurant, &b3);
 Terminal t9("t009", &restaurant, &b3);
 
+// Threads
+Thread terminal1_t;
+Thread terminal2_t;
+Thread terminal3_t;
+Thread terminal4_t;
+Thread terminal5_t;
+Thread terminal6_t;
+Thread terminal7_t;
+Thread terminal8_t;
+Thread terminal9_t;
+Thread paymentNow_t;
+Thread paymentMidnight_t;
+
+// Mails & Queues
+
+Mail<Payment*, 3> sameBank_m;
+Mail<Payment*, 3> otherBank_m;
+
+void manageTransactions(Terminal * terminal, User * buyer, int amount){
+
+    while(true){
+        if (terminal->sendTransaction(buyer, amount)){
+            Bancontact * bancontactServer = terminal->getBancontact();
+            Bank * buyerBank = bancontactServer->getUserBank(buyer);
+            Payment payment(buyer, terminal->getSeller(), amount);
+            Payment * pointerToPayment = &payment;
+            
+            if (buyerBank->checkPaymentTime(payment)){
+                pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                sameBank_m.put(pointerToPayment);
+            } else {
+                pointerToPayment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                otherBank_m.put(pointerToPayment);
+            }
+        }
+
+    }
+}
+
+void managePaymentNow(void){
+
+    while(true){
+        Payment * payment = sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
+        std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
+        Bank * bank = nullptr;
+        if (bankID == "BEKBC"){
+            bank = &KBC;
+        } else if(bankID == "BEBEL") {
+            bank = &Belfius;
+        }
+        bank->pay(*(payment));
+    }
+}
+
+void managePaymentMidnight(void){
+
+    while(true){
+
+
+    }
+}
 
 int main(){
 
@@ -58,7 +117,7 @@ int main(){
     b2.connectToBank(&Belfius);
     b3.connectToBank(&Belfius);
 
-    t1.sendTransaction(&student1, 3.10);
+    
 
     while(true){
         //led1 =! led1;
