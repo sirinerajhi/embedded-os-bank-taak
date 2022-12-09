@@ -63,14 +63,14 @@ void manageTransactions(Terminal * terminal, User * buyer, int amount){
             Bancontact * bancontactServer = terminal->getBancontact();
             Bank * buyerBank = bancontactServer->getUserBank(buyer);
             Payment payment(buyer, terminal->getSeller(), amount);
-            Payment * pointerToPayment = &payment;
+            Payment *pointerToPayment = &payment;
             
             if (buyerBank->checkPaymentTime(payment)){
-                pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                sameBank_m.put(pointerToPayment);
+                pointerToPayment = &sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                sameBank_m.put(&pointerToPayment);
             } else {
-                pointerToPayment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                otherBank_m.put(pointerToPayment);
+                pointerToPayment = &otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                otherBank_m.put(&pointerToPayment);
             }
         }
 
@@ -80,7 +80,7 @@ void manageTransactions(Terminal * terminal, User * buyer, int amount){
 void managePaymentNow(void){
 
     while(true){
-        Payment * payment = sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
+        Payment * payment = &sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
         std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
         Bank * bank = nullptr;
         if (bankID == "BEKBC"){
@@ -95,6 +95,7 @@ void managePaymentNow(void){
 void managePaymentMidnight(void){
 
     while(true){
+
 
 
     }
@@ -117,7 +118,7 @@ int main(){
     b2.connectToBank(&Belfius);
     b3.connectToBank(&Belfius);
 
-    
+    terminal1_t.start(callback(manageTransactions, &t1, &student1, 5));
 
     while(true){
         //led1 =! led1;
