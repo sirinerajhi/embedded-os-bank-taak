@@ -52,31 +52,30 @@ Thread paymentMidnight_t;
 
 // Mails & Queues
 
-Mail<Payment*, 3> sameBank_m;
-Mail<Payment*, 3> otherBank_m;
+Mail<Payment, 3> sameBank_m;
+Mail<Payment, 3> otherBank_m;
 
-void manageTransactions(Terminal * terminal, User * buyer, int amount){
+// Arguments
+
+int amount = 5;
+
+void manageTransactions(Terminal * terminal){
 
     while(true){
+        User * buyer = &student1;
         if (terminal->sendTransaction(buyer, amount)){
             Bancontact *bancontactServer = terminal->getBancontact();
             Bank * buyerBank = bancontactServer->getUserBank(buyer);
-            Payment payTime(buyer, terminal->getSeller(), amount);
+            Payment payTime(buyer, terminal->getSeller(), 5);
             Payment * pointerToPayment = &payTime;
             
             if (buyerBank->checkPaymentTime(payTime)){
-                Payment pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                payment->setAmount(amount);
-                payment->setBuyer(buyer);
-                payment->setSeller(terminal->getSeller());
+                pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
                 sameBank_m.put(pointerToPayment);
             } 
             else {
-                Payment *payment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                payment->setAmount(amount);
-                payment->setBuyer(buyer);
-                payment->setSeller(terminal->getSeller());
-                otherBank_m.put(payment);
+                pointerToPayment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                otherBank_m.put(pointerToPayment);
             }
         }
     }
@@ -123,7 +122,7 @@ int main(){
     b2.connectToBank(&Belfius);
     b3.connectToBank(&Belfius);
 
-    // terminal1_t.start(callback(manageTransactions, &t1, &student1, 5));
+    terminal1_t.start(callback(manageTransactions, &t1));
 
     while(true){
         //led1 =! led1;

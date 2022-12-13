@@ -2,11 +2,11 @@
     {
         "module": "[fill]",
         "size": {
-            ".text": 148,
-            ".data": 9,
+            ".text": 144,
+            ".data": 13,
             ".bss": 32,
-            ".text-delta": 0,
-            ".data-delta": 0,
+            ".text-delta": -4,
+            ".data-delta": 4,
             ".bss-delta": 0
         }
     },
@@ -57,10 +57,10 @@
     {
         "module": "[lib]\\stdc++.a",
         "size": {
-            ".text": 171568,
+            ".text": 171632,
             ".data": 145,
             ".bss": 5720,
-            ".text-delta": 0,
+            ".text-delta": 64,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -68,21 +68,21 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 1952,
-            ".data": 0,
-            ".bss": 3205,
-            ".text-delta": 0,
-            ".data-delta": 0,
+            ".text": 2182,
+            ".data": 4,
+            ".bss": 3253,
+            ".text-delta": 230,
+            ".data-delta": 4,
             ".bss-delta": 0
         }
     },
     {
         "module": "mbed-os\\cmsis",
         "size": {
-            ".text": 8874,
+            ".text": 9022,
             ".data": 168,
             ".bss": 6208,
-            ".text-delta": 0,
+            ".text-delta": 148,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -112,10 +112,10 @@
     {
         "module": "mbed-os\\platform",
         "size": {
-            ".text": 6038,
+            ".text": 6042,
             ".data": 260,
             ".bss": 365,
-            ".text-delta": 0,
+            ".text-delta": 4,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -123,10 +123,10 @@
     {
         "module": "mbed-os\\rtos",
         "size": {
-            ".text": 576,
+            ".text": 856,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 280,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -145,10 +145,10 @@
     {
         "module": "src\\bancontact.o",
         "size": {
-            ".text": 676,
+            ".text": 966,
             ".data": 0,
             ".bss": 1,
-            ".text-delta": 0,
+            ".text-delta": 290,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -156,10 +156,21 @@
     {
         "module": "src\\bank.o",
         "size": {
-            ".text": 760,
+            ".text": 978,
             ".data": 0,
             ".bss": 1,
-            ".text-delta": 0,
+            ".text-delta": 218,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "src\\payment.o",
+        "size": {
+            ".text": 18,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 18,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -167,10 +178,10 @@
     {
         "module": "src\\terminal.o",
         "size": {
-            ".text": 280,
+            ".text": 372,
             ".data": 0,
             ".bss": 1,
-            ".text-delta": 0,
+            ".text-delta": 92,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -178,20 +189,20 @@
     {
         "module": "src\\user.o",
         "size": {
-            ".text": 126,
+            ".text": 130,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 4,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
         "summary": {
-            "static_ram": 20000,
-            "static_ram_delta": 0,
-            "total_flash": 280452,
-            "total_flash_delta": 0
+            "static_ram": 20056,
+            "static_ram_delta": 8,
+            "total_flash": 281804,
+            "total_flash_delta": 1352
         }
     }
 ]
