@@ -1,6 +1,6 @@
 BUILD\NUCLEO_L476RG\GCC_ARM\main.o: main.cpp \
- BUILD\NUCLEO_L476RG\GCC_ARM\mbed_config.h src/bank.h mbed-os/mbed.h \
- mbed-os/platform/include/platform/mbed_version.h \
+ BUILD\NUCLEO_L476RG\GCC_ARM\mbed_config.h src/bancontact.h \
+ mbed-os/mbed.h mbed-os/platform/include/platform/mbed_version.h \
  mbed-os/rtos/include/rtos/rtos.h \
  mbed-os/rtos/include/rtos/internal/mbed_rtos_storage.h \
  mbed-os/cmsis/device/rtos/include/mbed_rtx_storage.h \
@@ -317,5 +317,5 @@ BUILD\NUCLEO_L476RG\GCC_ARM\main.o: main.cpp \
  mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
  mbed-os/platform/include/platform/mbed_stats.h \
  mbed-os/platform/include/platform/Stream.h \
- mbed-os/platform/include/platform/FileLike.h src/user.h src/payment.h \
- src/bancontact.h src/terminal.h
+ mbed-os/platform/include/platform/FileLike.h src/user.h src/bank.h \
+ src/payment.h src/terminal.h

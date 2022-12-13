@@ -1,4 +1,3 @@
-#include "bank.h"
 #include "src/bancontact.h"
 #include "src/bank.h"
 #include "src/terminal.h"
@@ -60,46 +59,52 @@ void manageTransactions(Terminal * terminal, User * buyer, int amount){
 
     while(true){
         if (terminal->sendTransaction(buyer, amount)){
-            Bancontact * bancontactServer = terminal->getBancontact();
+            Bancontact *bancontactServer = terminal->getBancontact();
             Bank * buyerBank = bancontactServer->getUserBank(buyer);
-            Payment payment(buyer, terminal->getSeller(), amount);
-            Payment *pointerToPayment = &payment;
+            Payment payTime(buyer, terminal->getSeller(), amount);
+            Payment * pointerToPayment = &payTime;
             
-            if (buyerBank->checkPaymentTime(payment)){
-                pointerToPayment = &sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                sameBank_m.put(&pointerToPayment);
-            } else {
-                pointerToPayment = &otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                otherBank_m.put(&pointerToPayment);
+            if (buyerBank->checkPaymentTime(payTime)){
+                Payment pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                payment->setAmount(amount);
+                payment->setBuyer(buyer);
+                payment->setSeller(terminal->getSeller());
+                sameBank_m.put(pointerToPayment);
+            } 
+            else {
+                Payment *payment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                payment->setAmount(amount);
+                payment->setBuyer(buyer);
+                payment->setSeller(terminal->getSeller());
+                otherBank_m.put(payment);
             }
         }
-
     }
 }
 
-void managePaymentNow(void){
+// void managePaymentNow(void){
 
-    while(true){
-        Payment * payment = &sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
-        std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
-        Bank * bank = nullptr;
-        if (bankID == "BEKBC"){
-            bank = &KBC;
-        } else if(bankID == "BEBEL") {
-            bank = &Belfius;
-        }
-        bank->pay(*(payment));
-    }
-}
+//     while(true){
+//         Payment * payment = &sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
+//         std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
+//         Bank * bank = nullptr;
+//         if (bankID == "BEKBC"){
+//             bank = &KBC;
+//         } else if(bankID == "BEBEL") {
+//             bank = &Belfius;
+//         }
+//         bank->pay(*(payment));
+//     }
+// }
 
-void managePaymentMidnight(void){
+// void managePaymentMidnight(void){
 
-    while(true){
+//     while(true){
 
 
 
-    }
-}
+//     }
+// }
 
 int main(){
 
@@ -118,7 +123,7 @@ int main(){
     b2.connectToBank(&Belfius);
     b3.connectToBank(&Belfius);
 
-    terminal1_t.start(callback(manageTransactions, &t1, &student1, 5));
+    // terminal1_t.start(callback(manageTransactions, &t1, &student1, 5));
 
     while(true){
         //led1 =! led1;

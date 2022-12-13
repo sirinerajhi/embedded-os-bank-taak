@@ -40,7 +40,7 @@ void Bank::pay(Payment transaction){
     transaction.getBuyer()->updateBalance(-(transaction.getAmount()));
     transaction.getSeller()->updateBalance(transaction.getAmount());
 
-    std::cout << "Payment from " << transaction.getBuyer()->getUserID() << " to " << transaction.getSeller()->getUserID() << " of " << transaction.getAmount() << " has been paid." << std:endl;
+    std::cout << "Payment from " << transaction.getBuyer()->getUserID() << " to " << transaction.getSeller()->getUserID() << " of " << transaction.getAmount() << " has been paid." << std::endl;
 }
 
  std::string Bank::getBankID(void) {
