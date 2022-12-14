@@ -2,11 +2,11 @@
     {
         "module": "[fill]",
         "size": {
-            ".text": 132,
+            ".text": 120,
             ".data": 13,
-            ".bss": 36,
-            ".text-delta": -14,
-            ".data-delta": 4,
+            ".bss": 32,
+            ".text-delta": -4,
+            ".data-delta": 0,
             ".bss-delta": 0
         }
     },
@@ -57,7 +57,7 @@
     {
         "module": "[lib]\\stdc++.a",
         "size": {
-            ".text": 172348,
+            ".text": 172016,
             ".data": 145,
             ".bss": 5720,
             ".text-delta": 0,
@@ -68,12 +68,12 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 3604,
+            ".text": 4072,
             ".data": 4,
-            ".bss": 34033,
-            ".text-delta": 142,
-            ".data-delta": 4,
-            ".bss-delta": 0
+            ".bss": 4053,
+            ".text-delta": 4,
+            ".data-delta": 0,
+            ".bss-delta": -30400
         }
     },
     {
@@ -156,7 +156,7 @@
     {
         "module": "src\\bank.o",
         "size": {
-            ".text": 1154,
+            ".text": 1210,
             ".data": 0,
             ".bss": 1,
             ".text-delta": 0,
@@ -189,7 +189,7 @@
     {
         "module": "src\\user.o",
         "size": {
-            ".text": 138,
+            ".text": 150,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -199,10 +199,10 @@
     },
     {
         "summary": {
-            "static_ram": 50840,
-            "static_ram_delta": 8,
-            "total_flash": 284684,
-            "total_flash_delta": 136
+            "static_ram": 20856,
+            "static_ram_delta": -30400,
+            "total_flash": 284876,
+            "total_flash_delta": 0
         }
     }
 ]
