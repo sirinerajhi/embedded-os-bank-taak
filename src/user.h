@@ -4,22 +4,7 @@
 
 class User {
 
-    // public:
-    //     User();
-    //     User(int balance, std::string bank);
-    //     void pay(int amount, User * receiver);
-    //     int getBalance(void);
-    //     void setBalance(int amount);
-    //     std::string getBank(void);
-    //     void setBank(std::string bank);
-    //     void receiveMoney(int amount);
-    //     bool checkPaymentTime(User * receiver);
-    //     std::string getID();
-
-    // private:
-    //     int _balance = 0;
-    //     std::string _bank = "";
-
+    // Functies van de User klasse (uitleg in .cpp file)
     public:
         User();
         User(int balance);
@@ -29,8 +14,9 @@ class User {
         void setUserID(std::string userID);
         std::string getUserID(void);
 
+    // Attributen van de User klasse
     private:
-        int _balance = 0;
-        std::string _accountID = "";
+        int _balance = 0;               // Saldo van de gebruiker
+        std::string _accountID = "";    // Rekeningnummer van de gebruiker (wordt verkregen via de bank)
         
 };

@@ -1,73 +1,28 @@
 #include "user.h"
 
-User::User() : User(0){}
+User::User() : User(0){}    // Default constructor van de gebruiker. Deze roept de andere constructor aan en geeft aan dat er geen geld op de rekening staat.
 
-User::User(int balance){
+User::User(int balance){        // Constructor van de gebruiker. Hierin wordt aangegeven hoeveel geld er op de rekening staat.
     this->_balance = balance;
 }
 
-int User::getBalance(void){
+int User::getBalance(void){     // Functie om op te vragen hoeveel geld er op de rekening staat.
     return this->_balance;
 }
 
-void User::setBalance(int balance){
+void User::setBalance(int balance){        // Functie om het saldo volledig opnieuw in te stellen (dus geen betaling uitvoeren of ontvangen).
     this->_balance = balance;
 }
 
-void User::updateBalance(int balance){
+void User::updateBalance(int balance){      // Functie om het salde te updaten na een betaling.
     this->_balance += balance;
 }
 
-void User::setUserID(std::string userID) {
+void User::setUserID(std::string userID) {  // Functie die gebruikt wordt om het rekeningnummer in te geven. Dit wordt door de bank aangeroepen om dan via de bank het nummer te verkrijgen.
     this->_accountID = userID;
 }
 
-std::string User::getUserID(void) {
+std::string User::getUserID(void) {     // Functie om het rekeningnummer van de gebruiker op te vragen.
     return this->_accountID;
 }
-
-
-
-
-
-// User::User() : User(0, "No Bank"){}
-
-// User::User(int balance, std::string bank){
-//     this->_balance = balance;
-//     this->_bank = bank;
-    
-// }
-
-// void User::pay(int amount, User * receiver){
-//     this->_balance -= amount;
-//     receiver->receiveMoney(amount);
-// }
-
-// void User::receiveMoney(int amount){
-//     this->_balance += amount;
-// }
-
-// bool User::checkPaymentTime(User * receiver){
-//     if (this->_bank == receiver->getBank()){
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
-
-// int User::getBalance(void){
-//     return this->_balance;
-// }
-
-// void User::setBalance(int amount){
-//     this->_balance = amount;
-// }
-
-// std::string User::getBank(void){
-//     return this->_bank;
-// }
-
-// void User::setBank(std::string bank){
-//     this->_bank = bank;
-// }
 
