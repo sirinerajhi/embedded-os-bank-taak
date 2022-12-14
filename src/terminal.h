@@ -7,10 +7,10 @@
 #include "bank.h"
 
 class Terminal {
-      
+
+    // Functies van de Terminal klasse (uitleg in .cpp file)  
     public:
         Terminal();
-        // Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
         Terminal(std::string terminalID, User * seller, Bancontact * bancontact);
         bool sendTransaction(User * buyer, int amount);
         User * getSeller(void);
@@ -19,10 +19,10 @@ class Terminal {
         void setTerminalID(std::string id);
         Bancontact * getBancontact(void);
         
-
+    // Attributen van de Terminal klasse
     private:
-        std::string _terminalID = "";
-        User * _seller = nullptr;
-        Bancontact * _bancontact = nullptr;
-        bool _connection = false;
+        std::string _terminalID = "";       // ID van de terminal
+        User * _seller = nullptr;           // Verwijzing naar de verkoper of het verkooppunt waar de terminal zich bevindt
+        Bancontact * _bancontact = nullptr; // Verwijzing naar de Bancontactserver waarmee de terminal verbonden is
+        bool _connection = false;           // Een check om te zien of er verbinding is met de server
 };
