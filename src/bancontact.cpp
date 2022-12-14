@@ -1,20 +1,16 @@
 #include "bancontact.h"
 #include <iostream>
 
-Bancontact::Bancontact() : Bancontact(""){}
+Bancontact::Bancontact() : Bancontact(""){} // Default constructor van de bancontact klasse
+                                            // Deze roept de andere constructor aan en geeft een lege string mee als ID
 
-Bancontact::Bancontact(std::string id){
+Bancontact::Bancontact(std::string id){     // Constructor van Bancontact waarin een ID kan in meegegeven worden
     this->_id = id;
 }
 
-int Bancontact::getCount(void){
-    return this->_counter;
-}
-
 bool Bancontact::addConnection(std::string terminal){
-    if (this->_counter < 3){
+    if (this->_terminals.size() <= 3){
         _terminals.push_back(terminal);
-        this->_counter++;
         return true;
     } else {
         return false;

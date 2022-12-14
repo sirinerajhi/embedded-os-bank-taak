@@ -7,6 +7,7 @@
 #include "mbed.h"
 
 DigitalOut led1(LED1);
+Ticker ticker;
 
 // Users
 User breadPit(50.0);
@@ -52,61 +53,91 @@ Thread paymentMidnight_t;
 
 // Mails & Queues
 
-Mail<Payment, 3> sameBank_m;
-Mail<Payment, 3> otherBank_m;
+Queue<Payment, 3> sameBank_m;
+Queue<Payment, 3> otherBank_m;
 
-// Arguments
+//Semaphore 
+Semaphore sema(3);
 
-int amount = 5;
+//Terminal * terminal, User * buyer, int amount
+//we gaan dat in een struct moeten steken, want je kan blijkbaar maar 1 object als argument meegeven met een callback.
 
-void manageTransactions(Terminal * terminal){
+//struct for manage transactions:
+typedef struct{ 
+    Terminal * terminal;
+    User * buyer;
+    int amount;
+} transaction_struct;
+
+
+void flagSetter(){
+    paymentMidnight_t.flags_set(0x1);
+}
+
+void manageTransactions(transaction_struct * receivedTransaction){
 
     while(true){
-        User * buyer = &student1;
-        if (terminal->sendTransaction(buyer, amount)){
-            Bancontact *bancontactServer = terminal->getBancontact();
-            Bank * buyerBank = bancontactServer->getUserBank(buyer);
-            Payment payTime(buyer, terminal->getSeller(), 5);
-            Payment * pointerToPayment = &payTime;
+        ThisThread::sleep_for(1s);
+        if (receivedTransaction->terminal->sendTransaction(receivedTransaction->buyer, receivedTransaction->amount)){
+            Bancontact *bancontactServer = receivedTransaction->terminal->getBancontact();
+            Bank * buyerBank = bancontactServer->getUserBank(receivedTransaction->buyer);
+            Payment payTime(receivedTransaction->buyer, receivedTransaction->terminal->getSeller(), receivedTransaction->amount);
+            //Payment * pointerToPayment = &payTime;
             
             if (buyerBank->checkPaymentTime(payTime)){
-                pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                sameBank_m.put(pointerToPayment);
+                //pointerToPayment = sameBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                sameBank_m.try_put_for(Kernel::wait_for_u32_forever, &payTime);
             } 
             else {
-                pointerToPayment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
-                otherBank_m.put(pointerToPayment);
+                //pointerToPayment = otherBank_m.try_alloc_for(Kernel::wait_for_u32_forever);
+                otherBank_m.try_put_for(Kernel::wait_for_u32_forever, &payTime);
             }
         }
     }
 }
 
-// void managePaymentNow(void){
+void managePaymentNow(void){
 
-//     while(true){
-//         Payment * payment = &sameBank_m.try_get_for(Kernel::wait_for_u32_forever);
-//         std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
-//         Bank * bank = nullptr;
-//         if (bankID == "BEKBC"){
-//             bank = &KBC;
-//         } else if(bankID == "BEBEL") {
-//             bank = &Belfius;
-//         }
-//         bank->pay(*(payment));
-//     }
-// }
+    while(true){
+        Payment * payment; 
+        sameBank_m.try_get_for(Kernel::wait_for_u32_forever, &payment);
+        std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
+        Bank * bank = nullptr;
+        if (bankID == "BEKBC"){
+            bank = &KBC;
+        } else if(bankID == "BEBEL") {
+            bank = &Belfius;
+        }
+        bank->pay(*(payment));
+        //sameBank_m.free(payment);
 
-// void managePaymentMidnight(void){
+    }
+}
 
-//     while(true){
+void managePaymentMidnight(void){
+
+    while(true){
+        ThisThread::flags_wait_any(0x1);
+        Payment * payment;
+        otherBank_m.try_get_for(Kernel::wait_for_u32_forever, &payment);
+        std::string bankID = payment->getBuyer()->getUserID().substr(0,payment->getBuyer()->getUserID().size()-1);
+        Bank * bank = nullptr;
+        if (bankID == "BEKBC"){
+            bank = &KBC;
+        } else if(bankID == "BEBEL") {
+            bank = &Belfius;
+        }
+        bank->pay(*(payment));
+        //otherBank_m.free(payment);
+
+    }
+}
 
 
-
-//     }
-// }
 
 int main(){
 
+    ticker.attach(&flagSetter,300);
     KBC.addUser(&breadPit);
     KBC.addUser(&starbucks);
     KBC.addUser(&student1);
@@ -122,10 +153,12 @@ int main(){
     b2.connectToBank(&Belfius);
     b3.connectToBank(&Belfius);
 
-    terminal1_t.start(callback(manageTransactions, &t1));
+    transaction_struct item;
+    item.amount = 3;
+    item.buyer = &student1;
+    item.terminal = &t1;
 
-    while(true){
-        //led1 =! led1;
-        //ThisThread::sleep_for(200ms);
-    }
+    terminal1_t.start(callback(manageTransactions, &item));
+    paymentNow_t.start(callback(managePaymentNow));
+    paymentMidnight_t.start(callback(managePaymentMidnight));
 }
