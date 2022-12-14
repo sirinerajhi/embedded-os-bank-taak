@@ -28,16 +28,18 @@ Bank * Bancontact::getUserBank(User * user){                                    
     std::cout << "User ID : " << userID << std::endl;                           // De match wordt adhv een pointer gereturned.
     std::cout << "User bank ID = " << userBankID << std::endl;                  // Als de bank niet in verbinding zou staan met de server dan wordt er geen gereturned.
 
+    Bank * userBank = nullptr;
+    
     for (int i = 0; i < _connectedBanks.size() ; i++){
         if (userBankID == _connectedBanks[i]->getBankID()){
             std::cout << "Bank is " << _connectedBanks[i]->getBankID() << std::endl;
-            return (_connectedBanks[i]);
-        }
-        else {
-            std::cout << "Bank not found" << std::endl;
-            return nullptr;
+            userBank = _connectedBanks[i];
         }
     }
+    if (userBank == nullptr) {
+        std::cout << "Bank not found" << std::endl;
+    }
+    return userBank;
 
 }
 

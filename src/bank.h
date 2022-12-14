@@ -14,9 +14,10 @@ class Bank {
         Bank(std::string name, std::string bankID);
         void addUser(User * user);
         bool checkBalance(User * user, int amount);
-        void pay(Payment transaction);
-        bool checkPaymentTime(Payment payment);
+        void pay(Payment * transaction);
+        bool checkPaymentTime(Payment * payment);
         std::string getBankID(void);
+        void resetUserReserve(void);
 
     // Attributen van de Bank klasse
     private:

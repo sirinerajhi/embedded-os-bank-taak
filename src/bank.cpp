@@ -17,7 +17,8 @@ void Bank::addUser(User * user){                                            // F
 
 bool Bank::checkBalance(User * user, int amount){                           // Functie om het saldo van de gebruiker te checken.
     std::cout << "Bank checking user balance" << std::endl;                 // De functie van meegegeven gebruiker om het saldo te checken wordt aangeroepen.
-    if (user->getBalance() > amount){                                       // Als deze groter is dan het gespecifieerd bedrag wordt er 'true' gereturned, anders 'false'.
+    if ((user->getBalance() - user->getReserved()) > amount){               // Als het saldo groter is dan het gespecifieerd bedrag wordt er 'true' gereturned, anders 'false'.
+        user->updateReserved(amount);                                       // Ook wordt het bedrag gereserveerd bij de gebruiker, zo kan er zeker niet in het negatieve gegaan worden als er bvb nog wat betalingen in de wacht staan voor andere banken (middernachtbetalingen)
         return true;
     } 
     else 
@@ -26,20 +27,28 @@ bool Bank::checkBalance(User * user, int amount){                           // F
     } 
 }
 
-bool Bank::checkPaymentTime(Payment payment) {                                                  // Functie om te zien als de betaling nu of om middernacht moet uitgevoerd worden.
-    User * buyer = payment.getBuyer();                                                          // Eerst worden zowel de koper als verkoper uit de transactie gehaald.
-    User * seller = payment.getSeller();                                                        // Dan wordt uit beide partijen het rekeningnr uitgelezen en hieruit de bank afgeleid.
+bool Bank::checkPaymentTime(Payment * payment) {                                                // Functie om te zien als de betaling nu of om middernacht moet uitgevoerd worden.
+    User * buyer = payment->getBuyer();                                                         // Eerst worden zowel de koper als verkoper uit de transactie gehaald.
+    User * seller = payment->getSeller();                                                       // Dan wordt uit beide partijen het rekeningnr uitgelezen en hieruit de bank afgeleid.
     std::string buyerBankID = buyer->getUserID().substr(0,buyer->getUserID().size()-1);         // Als het bankID van beide gebruikers overeenkomt (= ze zitten bij dezelfde bank) dan wordt 'true' gereturned om aan te geven dat de transactie meteen door mag gaan.
     std::string sellerBankID = seller->getUserID().substr(0,seller->getUserID().size()-1);      // Als dit niet overeen komt dan returnt de functie 'false' en moet er gewacht worden tot 's nachts.
     
-    if(buyerBankID == sellerBankID) return true;
+    if(buyerBankID == sellerBankID) {
+        return true;
+    } else {
+        return false;
+    } 
 }
 
-void Bank::pay(Payment transaction){                                        // Functie om een betaling uit te voeren.
-    transaction.getBuyer()->updateBalance(-(transaction.getAmount()));      // De koper en verkoper worden uit de transactie gehaald. 
-    transaction.getSeller()->updateBalance(transaction.getAmount());        // Beide hun saldo's worden aangepast, positief bedrag voor de verkoper, negatief bedrag voor de koper
+void Bank::pay(Payment * transaction){                                        // Functie om een betaling uit te voeren.
+    transaction->getBuyer()->updateBalance(-(transaction->getAmount()));      // De koper en verkoper worden uit de transactie gehaald. 
+    transaction->getSeller()->updateBalance(transaction->getAmount());        // Beide hun saldo's worden aangepast, positief bedrag voor de verkoper, negatief bedrag voor de koper
+    if(transaction->getBuyer()->getReserved() > 0) {                          // Het bedrag wordt ook terug afgetrokken van het gereserveerde saldo van de koper.
+        transaction->getBuyer()->updateReserved(-(transaction->getAmount())); // Hier zit ook nog een kleine extra check in zodat het gereserveerde bedrag zeker niet onder nul kan gaan.
+    }
+          
 
-    std::cout << "Payment from " << transaction.getBuyer()->getUserID() << " to " << transaction.getSeller()->getUserID() << " of " << transaction.getAmount() << " has been paid." << std::endl;
+    std::cout << "Payment from " << transaction->getBuyer()->getUserID() << " to " << transaction->getSeller()->getUserID() << " of " << transaction->getAmount() << " has been paid." << std::endl;
 }
 
  std::string Bank::getBankID(void) {        // Functie om de bankID van de bank terug te geven

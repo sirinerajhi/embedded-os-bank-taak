@@ -26,3 +26,10 @@ std::string User::getUserID(void) {     // Functie om het rekeningnummer van de 
     return this->_accountID;
 }
 
+void User::updateReserved(int amount){   // Functie om het gereserveerd bedrag te updaten.
+    this->_reservedBalance += amount;
+}
+
+int User::getReserved(void) {            // Functie om het gereserveerd bedrag te bekomen. 
+    return this->_reservedBalance;
+}

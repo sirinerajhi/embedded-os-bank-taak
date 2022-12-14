@@ -14,11 +14,11 @@ Terminal::Terminal(std::string terminalID, User * seller, Bancontact * bancontac
     }
 }
 
-bool Terminal::sendTransaction(User * buyer, int amount){               // Functie om een transactie op te starten.
-    std::cout << "Terminal processing transaction..." << std::endl;     // Eerst wordt er via de server de bank van de gebruiker opgevraagd
-                                                                        // Dan wordt via de server gekeken of het saldo van de gebruiker voldoende is. (Hiervoor gaat de server dit navragen bij de bank; zie functies in bancontact.cpp en bank.cpp)
-    Bank * bank = (_bancontact->getUserBank(buyer));                    // Als alle partijen (server en bank) doorlopen zijn en geen van hen geeft een foutmelden wordt er 'true' gereturned om aan te geven dat dit een transactie is die door kan gaan.      
-    if(this->_bancontact->checkUserBalance(buyer, amount, bank)){       // Wordt er ergens een foutmelding gegeven dan kan de transactie niet doorgaan ('false'). 
+bool Terminal::sendTransaction(User * buyer, int amount){                                           // Functie om een transactie op te starten.
+    std::cout << "Terminal " << this->_terminalID << " processing transaction..." << std::endl;     // Eerst wordt er via de server de bank van de gebruiker opgevraagd
+                                                                                                    // Dan wordt via de server gekeken of het saldo van de gebruiker voldoende is. (Hiervoor gaat de server dit navragen bij de bank; zie functies in bancontact.cpp en bank.cpp)
+    Bank * bank = (_bancontact->getUserBank(buyer));                                                // Als alle partijen (server en bank) doorlopen zijn en geen van hen geeft een foutmelden wordt er 'true' gereturned om aan te geven dat dit een transactie is die door kan gaan.      
+    if(this->_bancontact->checkUserBalance(buyer, amount, bank)){                                   // Wordt er ergens een foutmelding gegeven dan kan de transactie niet doorgaan ('false'). 
         std::cout << "Transaction accepted" << std::endl;
         return true;
     } else {
